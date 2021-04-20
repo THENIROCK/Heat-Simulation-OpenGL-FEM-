@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Libraries">
+      <UniqueIdentifier>{5d5a807a-9fea-48f3-b4be-851eb75b9eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Libraries">
+      <UniqueIdentifier>{0afdacf1-48a7-4af4-8617-5b9b0e985f73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{8bd193c7-7d45-4223-b400-1fefeb588de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\App States">
+      <UniqueIdentifier>{ab961bc6-9269-462d-b192-dd5513f4ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\App States">
+      <UniqueIdentifier>{4f1d682e-6d66-4b66-a7db-9e059aeb0c0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{6a3e3e99-3b08-4621-b73c-6d135ced967c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_demo.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_draw.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_tables.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\glad\glad.c">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="shader_s.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AppEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Workspace.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="State_HomeScreen.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Libraries</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shader_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imconfig.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_impl_glfw.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_impl_opengl3.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_internal.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imstb_rectpack.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imstb_textedit.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imstb_truetype.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AppEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AppState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State_Workspace.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="State_HomeScreen.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="3.3.shader.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="3.3.shader.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="simple-shader.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="simple-shader.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="1.model_loading.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="1.model_loading.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FirstOpenGL.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
