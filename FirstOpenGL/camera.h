@@ -16,6 +16,7 @@ enum Camera_Movement {
     RIGHT
 };
 
+
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
