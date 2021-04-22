@@ -47,6 +47,7 @@ void WorkspaceState::Init()
 
     // load models
     // -----------       
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     ourModel = Model("backpack/backpack.obj");
 
     // Setup Dear ImGui style
