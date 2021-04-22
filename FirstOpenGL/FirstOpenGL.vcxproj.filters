@@ -84,6 +84,9 @@
     <ClCompile Include="..\..\..\..\..\..\OpenGL\includes\imgui\imgui_impl_opengl3.cpp">
       <Filter>Source Files\Libraries</Filter>
     </ClCompile>
+    <ClCompile Include="DealiiTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader_s.h">
