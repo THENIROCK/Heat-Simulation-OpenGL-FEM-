@@ -90,6 +90,12 @@
     <ClCompile Include="HeatEquationTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="LaplaceEquation.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveEquationTimeDependent.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader_s.h">
