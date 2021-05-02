@@ -96,6 +96,9 @@
     <ClCompile Include="WaveEquationTimeDependent.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="XMLParser.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader_s.h">

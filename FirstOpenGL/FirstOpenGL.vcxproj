@@ -238,6 +238,7 @@
     <ClCompile Include="State_Workspace.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="WaveEquationTimeDependent.cpp" />
+    <ClCompile Include="XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\OpenGL\includes\imgui\imconfig.h" />

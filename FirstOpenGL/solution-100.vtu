@@ -7,7 +7,7 @@
 <UnstructuredGrid>
 <Piece NumberOfPoints="65536" NumberOfCells="16384" >
   <Points>
-    <DataArray type="Float32" NumberOfComponents="3" format="ascii">
+    <DataArray type="gey" NumberOfComponents="3" format="ascii">
 -1 -1 0
 -0.984375 -1 0
 -1 -0.984375 0
@@ -65546,7 +65546,6 @@
 1 1 0
     </DataArray>
   </Points>
-
   <Cells>
     <DataArray type="Int32" Name="connectivity" format="ascii">
 0	1	3	2
