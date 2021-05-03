@@ -293,9 +293,47 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     }
 
     //print the vector
-    /*for (int i = 0; i < vertices.size(); i++) {
+    for (int i = 0; i < vertices.size(); i++) {
         cout << vertices[i] << endl;
-    }*/
+    }
+
+    // Close the file
+    readFile.close();
+
+    // Next text file
+    //-----------------------------------------------------------------------------------------
+    ifstream readCoordFile("connectivity.txt");
+    string coordLine; //coordinate
+
+    // read the file line by line
+    while (getline(readCoordFile, coordLine)) {
+        // These connectivity indices are specified in quads so they must be converted to triangles.
+        // i.e. 1 2 3 4 --> 1 2 3, 2 3 4
+        // Create a string stream to parse the line https://www.youtube.com/watch?v=cR-N5DIrAGM
+        istringstream iss(coordLine);
+
+        // we will store 3 vertices at a time and push them onto the vector 3 at a time.
+        float coord1;
+        float coord2;
+        float coord3;
+        int i = 0;
+        while (iss >> coord1 && iss >> coord2 && iss >> coord3)
+        {
+            i++;
+            if (i>2)
+            {
+                indices.push_back(coord1);
+                indices.push_back(coord2);
+                indices.push_back(coord3);
+            }
+        };
+    }
+
+    //print the vector
+    for (int i = 0; i < indices.size(); i++) {
+        cout << "index: " << endl;
+        cout << indices[i] << endl;
+    }
 
     // Close the file
     readFile.close();
@@ -309,8 +347,9 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
         -0.25f, -0.25f, 0.0f, // position vertex 1
         0.0f, 0.0f, 1.0f,	 // color vertex 1
     };
-    vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices + 
-        sizeof(a_triangle_vertices) / sizeof(float));
+    //convert array to vector for testing purposes
+    /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices + 
+        sizeof(a_triangle_vertices) / sizeof(float));*/
 
     unsigned int triangle_indices[] = { 0, 1, 2 };
 
@@ -319,9 +358,9 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     glGenBuffers(1, &ebo);
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, triangle_vertices.size() * sizeof(float), triangle_vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangle_indices), triangle_indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));

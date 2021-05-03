@@ -35,7 +35,7 @@ void WorkspaceState::Init()
     // camera
     camera = &(app->camera);
     
-    app->create_triangle(app->vbo, app->vao, app->ebo);
+    app->create_object(app->vbo, app->vao, app->ebo);
 
     // build and compile shaders
     // -------------------------
@@ -99,25 +99,25 @@ void WorkspaceState::Draw()
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //white
     glClear(GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
 
-    // render moveable triangle
-    /*triangle_shader->use();
-    glBindVertexArray(app->vao);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);*/
-
     // view/projection transformations
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)app->scr_width / (float)app->scr_height, 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     ourShader->setMat4("projection", projection);
     ourShader->setMat4("view", view);
 
-    // render the loaded model
+    // render moveable triangle
     ourShader->use();
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-    model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// scale it down
-    ourShader->setMat4("model", model);
-    ourModel.Draw(*ourShader);
+    glBindVertexArray(app->vao);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    // render the loaded model
+    //ourShader->use();
+    //glm::mat4 model = glm::mat4(1.0f);
+    //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+    //model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// scale it down
+    //ourShader->setMat4("model", model);
+    //ourModel.Draw(*ourShader);
 
     // Render dear imgui onto screen
     ImGui::Render();

@@ -19,7 +19,7 @@ void HomeScreenState::Init()
 {
     app = AppEngine::Instance();
 
-    app->create_triangle(app->vbo, app->vao, app->ebo);
+    app->create_object(app->vbo, app->vao, app->ebo);
 
     // build and compile our shader program
     // ------------------------------------
@@ -71,7 +71,7 @@ void HomeScreenState::Update()
 void HomeScreenState::Draw()
 {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //white
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render moveable triangle
     triangle_shader->use();
