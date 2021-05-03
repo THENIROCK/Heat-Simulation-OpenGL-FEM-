@@ -38,7 +38,8 @@ public:
 	// Variables
 	//----------
 	Shader* ourShader; // you can name your shader files however you like
-	Shader* triangle_shader;
+	Shader* triangleShader;
+	Shader* simpleShader;
 	AppEngine* app;
 	Model ourModel;
 	Camera* camera;

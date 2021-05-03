@@ -40,7 +40,8 @@ void WorkspaceState::Init()
     // build and compile shaders
     // -------------------------
     ourShader = new Shader("1.model_loading.vert", "1.model_loading.frag");
-    triangle_shader = new Shader("simple-shader.vert", "simple-shader.frag");
+    triangleShader = new Shader("simple-shader.vert", "simple-shader.frag");
+    simpleShader = new Shader("3.3.shader.vert", "3.3.shader.frag");
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
@@ -57,7 +58,7 @@ void WorkspaceState::Init()
 void WorkspaceState::Cleanup()
 {
     delete ourShader;
-    delete triangle_shader;
+    delete triangleShader;
 }
 
 void WorkspaceState::HandleEvents()
@@ -81,13 +82,13 @@ void WorkspaceState::Update()
     ImGui::SliderFloat2("position", translation, -1.0, 1.0);
     static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
     // pass the parameters to the shader
-    triangle_shader->setUniform("rotation", rotation);
-    triangle_shader->setUniform("translation", translation[0], 
+    triangleShader->setUniform("rotation", rotation);
+    triangleShader->setUniform("translation", translation[0], 
         translation[1]);
     // color picker
     ImGui::ColorEdit3("color", color);
     // multiply triangle's color with this color
-    triangle_shader->setUniform("color", color[0], color[1], 
+    triangleShader->setUniform("color", color[0], color[1], 
         color[2]);
     ImGui::End();
 
@@ -96,8 +97,9 @@ void WorkspaceState::Update()
 
 void WorkspaceState::Draw()
 {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //white
-    glClear(GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
+    glClearColor(1.0f,1.0f,1.0f,1.0f); //white
+    glClearColor(0, 0, 0, 0); // black
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // view/projection transformations
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)app->scr_width / (float)app->scr_height, 0.1f, 100.0f);
@@ -107,6 +109,10 @@ void WorkspaceState::Draw()
 
     // render moveable triangle
     ourShader->use();
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+    model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// scale it down
+    ourShader->setMat4("model", model);
     glBindVertexArray(app->vao);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

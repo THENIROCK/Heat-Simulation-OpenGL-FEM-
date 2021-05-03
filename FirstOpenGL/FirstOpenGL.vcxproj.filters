@@ -178,6 +178,12 @@
     <None Include="1.model_loading.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="vtu-shader.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="vtu-shader.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FirstOpenGL.rc">

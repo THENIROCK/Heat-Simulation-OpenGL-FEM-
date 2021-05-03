@@ -329,9 +329,9 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     }
 
     //print the vector
-    for (int i = 0; i < indices.size(); i++) {
+    /*for (int i = 0; i < indices.size(); i++) {
         cout << indices[i] << endl;
-    }
+    }*/
 
     // Close the file
     readCoordFile.close();

@@ -23,7 +23,7 @@ void HomeScreenState::Init()
 
     // build and compile our shader program
     // ------------------------------------
-    ourShader = new Shader("3.3.shader.vert", "3.3.shader.frag"); // name shader files however you like
+    ourShader = new Shader("3.3.shader.vert", "3.3.shader.frag");
     triangle_shader = new Shader("simple-shader.vert", "simple-shader.frag");
 
     // Setup Dear ImGui style

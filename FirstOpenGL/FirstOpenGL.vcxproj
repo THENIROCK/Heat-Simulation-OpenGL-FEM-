@@ -268,6 +268,8 @@
     <None Include="3.3.shader.vert" />
     <None Include="simple-shader.frag" />
     <None Include="simple-shader.vert" />
+    <None Include="vtu-shader.frag" />
+    <None Include="vtu-shader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FirstOpenGL.rc" />
