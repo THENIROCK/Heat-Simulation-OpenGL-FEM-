@@ -188,9 +188,9 @@
 //        data_out.build_patches();
 //        data_out.set_flags(DataOutBase::VtkFlags(time, timestep_number));
 //        const std::string filename =
-//            "solution-" + Utilities::int_to_string(timestep_number, 3) + ".vtk";
+//            "solution-" + Utilities::int_to_string(timestep_number, 3) + ".vtu";
 //        std::ofstream output(filename);
-//        data_out.write_vtk(output);
+//        data_out.write_vtu(output);
 //    }
 //    template <int dim>
 //    void HeatEquation<dim>::refine_mesh(const unsigned int min_grid_level,
