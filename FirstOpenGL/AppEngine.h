@@ -48,6 +48,9 @@ public:
 	bool IsRunning() { return m_running; }
 	void Quit() { m_running = false; }
 	void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
+	void parse_points_file();
+	void parse_connectivity_file();
+	void parse_temperatures_file();
 	void create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
 	void draw_object();
 
@@ -87,6 +90,7 @@ public:
 	static float lastFrame;
 	vector<float> vertices;
 	vector<int> indices;
+	vector<float> v_temps;
 
 protected:
 	AppEngine() {} // Singleton Design Pattern 

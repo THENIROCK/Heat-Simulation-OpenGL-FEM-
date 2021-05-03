@@ -58,7 +58,7 @@ int AppEngine::Init(const char* title, int width, int height, int bpp, bool full
 
     // glfw window creation
     // --------------------
-    window = glfwCreateWindow( width, height, title, NULL, NULL);
+    window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -124,29 +124,29 @@ int AppEngine::Cleanup()
 //--------------------------
 void AppEngine::ChangeState(AppState* state)
 {
-	// cleanup the current state
-	if (!states.empty()) {
-		states.back()->Cleanup();
-		states.pop_back();
-	}
+    // cleanup the current state
+    if (!states.empty()) {
+        states.back()->Cleanup();
+        states.pop_back();
+    }
 
-	// store and init the new state
-	states.push_back(state);
-	states.back()->Init();
+    // store and init the new state
+    states.push_back(state);
+    states.back()->Init();
 }
 void AppEngine::PushState(AppState* state)
 {
-	// store and init the new state
-	states.push_back(state);
-	states.back()->Init();
+    // store and init the new state
+    states.push_back(state);
+    states.back()->Init();
 }
 void AppEngine::PopState()
 {
-	// cleanup the current state
-	if (!states.empty()) {
-		states.back()->Cleanup();
-		states.pop_back();
-	}
+    // cleanup the current state
+    if (!states.empty()) {
+        states.back()->Cleanup();
+        states.pop_back();
+    }
 }
 
 // On Update Events
@@ -180,7 +180,7 @@ void AppEngine::Update()
     // Get active state and call its update function
     states.back()->Update();
 }
-void AppEngine::Draw() 
+void AppEngine::Draw()
 {
     states.back()->Draw();
 }
@@ -273,7 +273,7 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
     // glBindVertexArray(0);
 }
 
-void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
+void AppEngine::parse_points_file()
 {
     ifstream readFile("points.txt");
     string line; //coordinate
@@ -283,20 +283,24 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
         // Create a string stream to parse the line https://www.youtube.com/watch?v=cR-N5DIrAGM
         istringstream iss(line);
         float coord;
-        while (iss >> coord) 
+        while (iss >> coord)
         {
             vertices.push_back(coord);
         };
     }
 
     //print the vector
-    //for (int i = 0; i < vertices.size(); i++) {
-    //    cout << "vertex" << vertices[i] << endl;
-    //}
+  /*  for (int i = 0; i < vertices.size(); i++) {
+        cout << "vertex" << vertices[i] << endl;
+    }*/
+
 
     // Close the file
     readFile.close();
+}
 
+void AppEngine::parse_connectivity_file()
+{
     // Next text file
     //-----------------------------------------------------------------------------------------
     ifstream readCoordFile("connectivity.txt");
@@ -304,43 +308,80 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
 
     // read the file line by line
     while (getline(readCoordFile, coordLine)) {
-        // These connectivity indices are specified in quads so they must be converted to triangles.
-        // i.e. 1 2 3 4 --> 1 2 3, 2 3 4
-        // Create a string stream to parse the line https://www.youtube.com/watch?v=cR-N5DIrAGM
-        istringstream iss(coordLine);
-
-        // we will store 3 vertices at a time and push them onto the vector 3 at a time.
-        vector<float> quad;
-        //temp to store current coordinate
-        float coord;
-
-        // while the string stream has not reached the end
-        while (iss >> coord)
+        if (coordLine.empty())
         {
-            quad.push_back(coord); // push the coordinate to the vector
+            cout << "empty line" << endl;
         }
+        else
+        {
+            // These connectivity indices are specified in quads so they must be converted to triangles.
+            // i.e. 1 2 3 4 --> 1 2 3, 2 3 4
+            // Create a string stream to parse the line https://www.youtube.com/watch?v=cR-N5DIrAGM
+            istringstream iss(coordLine);
 
-        // first triangle
-        indices.push_back(quad[0]);
-        indices.push_back(quad[1]);
-        indices.push_back(quad[2]);
+            // we will store 3 vertices at a time and push them onto the vector 3 at a time.
+            vector<int> quad;
+            //temp to store current coordinate
+            int coord;
 
-        //second triangle
-        indices.push_back(quad[2]);
-        indices.push_back(quad[3]);
-        indices.push_back(quad[0]);
+            // skip blank first line
+
+            // while the string stream has not reached the end
+            while (iss >> coord)
+            {
+                quad.push_back(coord); // push the coordinate to the vector
+            }
+
+            // first triangle
+            indices.push_back(quad[0]);
+            indices.push_back(quad[1]);
+            indices.push_back(quad[2]);
+
+            //second triangle
+            indices.push_back(quad[2]);
+            indices.push_back(quad[3]);
+            indices.push_back(quad[0]);
+        }
     }
 
     //print the vector
-   /* for (int i = 0; i < indices.size(); i++) {
-        cout << "index" << indices[i] << endl;
-    }*/
+    //for (int i = 0; i < indices.size(); i++) {
+    //    cout << "index" << indices[i] << endl;
+    //}
 
     // Close the file
     readCoordFile.close();
+}
+
+void AppEngine::parse_temperatures_file()
+{
+    ifstream readFile("UV.txt");
+    string temperatures;
+    getline(readFile, temperatures);
+    getline(readFile, temperatures);
+    istringstream iss(temperatures);
+    float temp;
+    while (iss >> temp)
+    {
+        v_temps.push_back(temp);
+    }
+    readFile.close();
+
+    //print the vector
+    /*for (int i = 0; i < v_temps.size(); i++) {
+        cout << "temp" << v_temps[i] << endl;
+    }*/
+}
+
+void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
+{
+    parse_points_file();
+    parse_connectivity_file();
+    parse_temperatures_file();
+    
 
     //convert array to vector for testing purposes
-    /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices + 
+    /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices +
         sizeof(a_triangle_vertices) / sizeof(float));*/
 
     // allocate memory to 1 vertex array, buffer, element buffer
