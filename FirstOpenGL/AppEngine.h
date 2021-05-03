@@ -48,6 +48,7 @@ public:
 	bool IsRunning() { return m_running; }
 	void Quit() { m_running = false; }
 	void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
+	void create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
 
 	// glfw: process inputs
 	//---------------------

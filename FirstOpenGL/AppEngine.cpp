@@ -8,6 +8,11 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 AppEngine AppEngine::s_AppEngine;
 
@@ -66,7 +71,7 @@ int AppEngine::Init(const char* title, int width, int height, int bpp, bool full
     glfwSetScrollCallback(window, scroll_callback);
 
     // set GLFW input modes
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -255,6 +260,66 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangle_indices), triangle_indices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+    // glBindVertexArray(0);
+}
+
+void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
+{
+    vector<float> vertices;
+    vector<int> indices;
+
+    ifstream readFile("points.txt");
+    string line; //coordinate
+
+    // read the file line by line
+    while (getline(readFile, line)) {
+        // Create a string stream to parse the line https://www.youtube.com/watch?v=cR-N5DIrAGM
+        istringstream iss(line);
+        float coord;
+        while (iss >> coord) 
+        {
+            vertices.push_back(coord);
+        };
+    }
+
+    //print the vector
+    /*for (int i = 0; i < vertices.size(); i++) {
+        cout << vertices[i] << endl;
+    }*/
+
+    // Close the file
+    readFile.close();
+
+    // create the triangle
+    float a_triangle_vertices[] = {
+        0.0f, 0.25f, 0.0f,	// position vertex 1
+        1.0f, 0.0f, 0.0f,	 // color vertex 1
+        0.25f, -0.25f, 0.0f,  // position vertex 1
+        0.0f, 1.0f, 0.0f,	 // color vertex 1
+        -0.25f, -0.25f, 0.0f, // position vertex 1
+        0.0f, 0.0f, 1.0f,	 // color vertex 1
+    };
+    vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices + 
+        sizeof(a_triangle_vertices) / sizeof(float));
+
+    unsigned int triangle_indices[] = { 0, 1, 2 };
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, triangle_vertices.size() * sizeof(float), triangle_vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangle_indices), triangle_indices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
