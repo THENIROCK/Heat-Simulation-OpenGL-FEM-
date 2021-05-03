@@ -27,7 +27,7 @@ int main()
     app->Init("CryoSIM", SCR_WIDTH, SCR_HEIGHT);
 
     // Load the Workspace
-    app->ChangeState(HomeScreenState::Instance());
+    app->ChangeState(WorkspaceState::Instance());
 
     // render loop
     // -----------

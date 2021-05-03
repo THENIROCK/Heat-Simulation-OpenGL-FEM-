@@ -293,9 +293,9 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     }
 
     //print the vector
-    for (int i = 0; i < vertices.size(); i++) {
+   /* for (int i = 0; i < vertices.size(); i++) {
         cout << vertices[i] << endl;
-    }
+    }*/
 
     // Close the file
     readFile.close();
@@ -316,46 +316,35 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
         float coord1;
         float coord2;
         float coord3;
-        int i = 0;
-        while (iss >> coord1 && iss >> coord2 && iss >> coord3)
+        iss >> coord1;
+        iss >> coord2;
+        while (iss >> coord3)
         {
-            i++;
-            if (i>2)
-            {
-                indices.push_back(coord1);
-                indices.push_back(coord2);
-                indices.push_back(coord3);
-            }
+            indices.push_back(coord1);
+            indices.push_back(coord2);
+            indices.push_back(coord3);
+            coord1 = coord2;
+            coord2 = coord3;
         };
     }
 
     //print the vector
     for (int i = 0; i < indices.size(); i++) {
-        cout << "index: " << endl;
         cout << indices[i] << endl;
     }
 
     // Close the file
-    readFile.close();
+    readCoordFile.close();
 
-    // create the triangle
-    float a_triangle_vertices[] = {
-        0.0f, 0.25f, 0.0f,	// position vertex 1
-        1.0f, 0.0f, 0.0f,	 // color vertex 1
-        0.25f, -0.25f, 0.0f,  // position vertex 1
-        0.0f, 1.0f, 0.0f,	 // color vertex 1
-        -0.25f, -0.25f, 0.0f, // position vertex 1
-        0.0f, 0.0f, 1.0f,	 // color vertex 1
-    };
     //convert array to vector for testing purposes
     /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices + 
         sizeof(a_triangle_vertices) / sizeof(float));*/
 
-    unsigned int triangle_indices[] = { 0, 1, 2 };
-
+    // allocate memory to 1 vertex array, buffer, element buffer
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ebo);
+
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
