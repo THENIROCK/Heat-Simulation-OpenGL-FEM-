@@ -39,7 +39,7 @@ void WorkspaceState::Init()
 
     // build and compile shaders
     // -------------------------
-    ourShader = new Shader("1.model_loading.vert", "1.model_loading.frag");
+    vtuShader = new Shader("vtu-shader.vert", "vtu-shader.frag");
     triangleShader = new Shader("simple-shader.vert", "simple-shader.frag");
     simpleShader = new Shader("3.3.shader.vert", "3.3.shader.frag");
 
@@ -57,8 +57,9 @@ void WorkspaceState::Init()
 
 void WorkspaceState::Cleanup()
 {
-    delete ourShader;
+    delete vtuShader;
     delete triangleShader;
+    delete simpleShader;
 }
 
 void WorkspaceState::HandleEvents()
@@ -97,25 +98,23 @@ void WorkspaceState::Update()
 
 void WorkspaceState::Draw()
 {
-    glClearColor(1.0f,1.0f,1.0f,1.0f); //white
+    //glClearColor(1.0f,1.0f,1.0f,1.0f); //white
     glClearColor(0, 0, 0, 0); // black
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // view/projection transformations
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)app->scr_width / (float)app->scr_height, 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
-    ourShader->setMat4("projection", projection);
-    ourShader->setMat4("view", view);
+    vtuShader->setMat4("projection", projection);
+    vtuShader->setMat4("view", view);
 
-    // render moveable triangle
-    ourShader->use();
+    // render VTK (.vtu) object
+    vtuShader->use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
     model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// scale it down
-    ourShader->setMat4("model", model);
-    glBindVertexArray(app->vao);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    vtuShader->setMat4("model", model);
+    app->draw_object();
 
     // render the loaded model
     //ourShader->use();

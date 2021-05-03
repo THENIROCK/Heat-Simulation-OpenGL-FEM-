@@ -99,6 +99,9 @@
     <ClCompile Include="XMLParser.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="VTU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader_s.h">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VTU.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

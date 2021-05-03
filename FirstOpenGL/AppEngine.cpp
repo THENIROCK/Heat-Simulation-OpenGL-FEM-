@@ -275,9 +275,6 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
 
 void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 {
-    vector<float> vertices;
-    vector<int> indices;
-
     ifstream readFile("points.txt");
     string line; //coordinate
 
@@ -293,9 +290,9 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     }
 
     //print the vector
-   /* for (int i = 0; i < vertices.size(); i++) {
-        cout << vertices[i] << endl;
-    }*/
+    //for (int i = 0; i < vertices.size(); i++) {
+    //    cout << "vertex" << vertices[i] << endl;
+    //}
 
     // Close the file
     readFile.close();
@@ -313,24 +310,30 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
         istringstream iss(coordLine);
 
         // we will store 3 vertices at a time and push them onto the vector 3 at a time.
-        float coord1;
-        float coord2;
-        float coord3;
-        iss >> coord1;
-        iss >> coord2;
-        while (iss >> coord3)
+        vector<float> quad;
+        //temp to store current coordinate
+        float coord;
+
+        // while the string stream has not reached the end
+        while (iss >> coord)
         {
-            indices.push_back(coord1);
-            indices.push_back(coord2);
-            indices.push_back(coord3);
-            coord1 = coord2;
-            coord2 = coord3;
-        };
+            quad.push_back(coord); // push the coordinate to the vector
+        }
+
+        // first triangle
+        indices.push_back(quad[0]);
+        indices.push_back(quad[1]);
+        indices.push_back(quad[2]);
+
+        //second triangle
+        indices.push_back(quad[2]);
+        indices.push_back(quad[3]);
+        indices.push_back(quad[0]);
     }
 
     //print the vector
-    /*for (int i = 0; i < indices.size(); i++) {
-        cout << indices[i] << endl;
+   /* for (int i = 0; i < indices.size(); i++) {
+        cout << "index" << indices[i] << endl;
     }*/
 
     // Close the file
@@ -350,13 +353,24 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    // Vertices are in stride 12 bytes
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    // Colours are in stride 24 bytes
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    //glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     // glBindVertexArray(0);
 }
+
+void AppEngine::draw_object()
+{
+    glBindVertexArray(vao);
+    glDisable(GL_CULL_FACE);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+

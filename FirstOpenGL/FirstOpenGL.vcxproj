@@ -237,6 +237,7 @@
     <ClCompile Include="State_HomeScreen.cpp" />
     <ClCompile Include="State_Workspace.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="VTU.cpp" />
     <ClCompile Include="WaveEquationTimeDependent.cpp" />
     <ClCompile Include="XMLParser.cpp" />
   </ItemGroup>
@@ -260,6 +261,7 @@
     <ClInclude Include="State_HomeScreen.h" />
     <ClInclude Include="State_Workspace.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="VTU.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="1.model_loading.frag" />

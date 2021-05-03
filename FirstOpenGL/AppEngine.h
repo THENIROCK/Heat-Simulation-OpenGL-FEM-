@@ -49,6 +49,7 @@ public:
 	void Quit() { m_running = false; }
 	void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
 	void create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
+	void draw_object();
 
 	// glfw: process inputs
 	//---------------------
@@ -84,6 +85,8 @@ public:
 	static Camera camera;
 	static float deltaTime;
 	static float lastFrame;
+	vector<float> vertices;
+	vector<int> indices;
 
 protected:
 	AppEngine() {} // Singleton Design Pattern 

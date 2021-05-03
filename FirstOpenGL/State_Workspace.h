@@ -37,7 +37,7 @@ public:
 
 	// Variables
 	//----------
-	Shader* ourShader; // you can name your shader files however you like
+	Shader* vtuShader; // you can name your shader files however you like
 	Shader* triangleShader;
 	Shader* simpleShader;
 	AppEngine* app;
