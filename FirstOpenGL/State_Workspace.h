@@ -44,6 +44,7 @@ public:
 	Model ourModel;
 	Camera* camera;
 	int frame; // current simulation frame to render
+	int prevFrame;
 	
 protected:
 	WorkspaceState() {} //Singleton Pattern

@@ -19,7 +19,7 @@ void HomeScreenState::Init()
 {
     app = AppEngine::Instance();
 
-    app->create_object(app->vbo, app->vao, app->ebo);
+    app->create_object(100, app->vbo, app->vao, app->ebo);
 
     // build and compile our shader program
     // ------------------------------------

@@ -262,6 +262,7 @@
     <ClInclude Include="State_Workspace.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="VTU.h" />
+    <ClInclude Include="XMLParser.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="1.model_loading.frag" />

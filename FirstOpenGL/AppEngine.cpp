@@ -1,5 +1,6 @@
 #include "AppEngine.h"
 #include "AppState.h"
+#include "XMLParser.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -11,6 +12,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iomanip>
+#include <filesystem>
 
 using namespace std;
 
@@ -273,7 +276,7 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
     // glBindVertexArray(0);
 }
 
-void AppEngine::parse_points_file(int frame)
+void AppEngine::parse_points_file(string frame)
 {
     ifstream readFile("points.txt");
     string line; //coordinate
@@ -299,7 +302,7 @@ void AppEngine::parse_points_file(int frame)
     readFile.close();
 }
 
-void AppEngine::parse_connectivity_file(int frame)
+void AppEngine::parse_connectivity_file(string frame)
 {
     // Next text file
     //-----------------------------------------------------------------------------------------
@@ -353,7 +356,7 @@ void AppEngine::parse_connectivity_file(int frame)
     readCoordFile.close();
 }
 
-void AppEngine::parse_temperatures_file(int frame)
+void AppEngine::parse_temperatures_file(string frame)
 {
     ifstream readFile("UV.txt");
     string temperatures;
@@ -375,9 +378,18 @@ void AppEngine::parse_temperatures_file(int frame)
 
 void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 {
-    parse_points_file(frame);
-    parse_connectivity_file(frame);
-    parse_temperatures_file(frame);
+    string threeDigfileNumber; // declare a variable to hold the 3 digit version of 'frame'
+    ostringstream oss; // open a string stream to feed a string into 'threeDigfileNumber'
+
+    // we set the spaces to be filled with 0's like so: 1 --> 000001
+    // then we set the width to a length of 3 like so: 000001 --> 001
+    // finally, convert that to a string and feed it into the variable.
+    oss << setfill('0') << setw(3) << to_string(frame);
+    threeDigfileNumber = oss.str();
+
+    parse_points_file(threeDigfileNumber);
+    parse_connectivity_file(threeDigfileNumber);
+    parse_temperatures_file(threeDigfileNumber);
     
     //convert array to vector for testing purposes
     /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices +
@@ -430,3 +442,40 @@ void AppEngine::draw_object()
     glBindVertexArray(0);
 }
 
+// turn all vtk files into txt files.
+void AppEngine::parse_all_obj_to_txt()
+{
+    bool endReached = false; // initially we have not reached the end
+
+    int frame = 0; // begin with file 000
+
+    cout << "beginning while loop" << endl;
+
+    while (!endReached) // self-explanatory. While the end has not been reached...
+    {
+
+        string threeDigfileNumber; // declare a variable to hold the 3 digit version of 'frame'
+        ostringstream oss; // open a string stream to feed a string into 'threeDigfileNumber'
+
+        // we set the spaces to be filled with 0's like so: 1 --> 000001
+        // then we set the width to a length of 3 like so: 000001 --> 001
+        // finally, convert that to a string and feed it into the variable.
+        oss << setfill('0') << setw(3) << to_string(frame);
+        threeDigfileNumber = oss.str();
+
+        // need to check whether a next file exists to determine whether to terminate the loop
+        bool fileIsVTK = filesystem::exists("solution-" + threeDigfileNumber + ".vtu");
+
+        // in other words: if there is a next file
+        if (fileIsVTK)
+        {
+            // parse the file
+            XMLParser::parseXMLFile("solution-"+ threeDigfileNumber+".vtu", threeDigfileNumber);
+            frame++; // don't forget to increment!
+        }
+        else 
+        {
+            endReached = true; // if a next file doens't exist, exit the while loop.
+        }
+    }
+}

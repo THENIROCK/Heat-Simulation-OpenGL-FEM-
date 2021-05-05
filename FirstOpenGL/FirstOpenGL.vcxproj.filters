@@ -164,6 +164,9 @@
     <ClInclude Include="VTU.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="XMLParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="3.3.shader.vert">

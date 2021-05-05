@@ -48,11 +48,12 @@ public:
 	bool IsRunning() { return m_running; }
 	void Quit() { m_running = false; }
 	void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
-	void parse_points_file(int frame);
-	void parse_connectivity_file(int frame);
-	void parse_temperatures_file(int frame);
+	void parse_points_file(std::string frame);
+	void parse_connectivity_file(std::string frame);
+	void parse_temperatures_file(std::string frame);
 	void create_object(int frame, unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
 	void draw_object();
+	void parse_all_obj_to_txt();
 
 	// glfw: process inputs
 	//---------------------

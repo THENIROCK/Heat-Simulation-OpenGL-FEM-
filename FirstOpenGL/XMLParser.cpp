@@ -1,8 +1,11 @@
+#include "XMLParser.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <rapidxml/rapidxml.hpp>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 using namespace rapidxml;
@@ -20,10 +23,10 @@ xml_node<>* piece_node = NULL;
 * 
 */
 
-void parsePoints(int frame)
+void XMLParser::parsePoints(string file, string frame)
 {
     // Read the VTK file
-    ifstream theFile("solution-" + std::to_string(frame) + ".vtu");
+    ifstream theFile(file);
     vector<char> buffer((istreambuf_iterator<char>(theFile)), 
         istreambuf_iterator<char>());
     buffer.push_back('\0');
@@ -40,7 +43,7 @@ void parsePoints(int frame)
     xml_node<>* print_node = piece_node->first_node("Points");
 
     // create file
-    ofstream MyFile("points.txt");
+    ofstream MyFile("points-" + frame + ".txt");
 
     // write to file
     MyFile << print_node->first_node("DataArray")->value();
@@ -49,10 +52,10 @@ void parsePoints(int frame)
     MyFile.close();
 }
 
-void parseTemperatures(int frame)
+void XMLParser::parseTemperatures(string file, string frame)
 {
     // Read the sample.xml file
-    ifstream theFile("solution-" + std::to_string(frame) + ".vtu");
+    ifstream theFile(file);
     vector<char> buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
     buffer.push_back('\0');
 
@@ -68,19 +71,19 @@ void parseTemperatures(int frame)
     xml_node<>* print_node = piece_node->first_node("PointData");
 
     // create file
-    ofstream MyFile("UV.txt");
+    ofstream MyFile("UV-" + frame + ".txt");
 
     // write to file
     MyFile << print_node->first_node("DataArray")->value();
 
     // Close file
-    MyFile.close(); 
+    MyFile.close();
 }
 
-void parseIndices(int frame)
+void XMLParser::parseIndices(string file, string frame)
 {
     // Read the sample.xml file
-    ifstream theFile("solution-"+std::to_string(frame)+".vtu");
+    ifstream theFile(file);
     vector<char> buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
     buffer.push_back('\0');
 
@@ -96,7 +99,7 @@ void parseIndices(int frame)
     xml_node<>* print_node = piece_node->first_node("Cells");
 
     // create file
-    ofstream MyFile("connectivity.txt");
+    ofstream MyFile("connectivity-" + frame + ".txt");
 
     // write to file
     MyFile << print_node->first_node("DataArray")->value();
@@ -105,13 +108,16 @@ void parseIndices(int frame)
     MyFile.close();
 }
 
-void parseXMLFile(int frame)
+void XMLParser::parseXMLFile(string file, string frame)
 {
-    cout << "\nParsing my students data (solution-100.vtu)....." << endl;
+    cout << "\nParsing VTK data ("+file+")....." << endl;
     
-    parsePoints(frame);
-    parseIndices(frame);
-    parseTemperatures(frame);
+    // change frame number to triple digit format
+    // e.g. 000, 001, 146, 859
+    
+    parsePoints(file, frame);
+    parseIndices(file, frame);
+    parseTemperatures(file, frame);
 
     // Iterate over the student nodes
     //for (student_node; student_node; student_node = student_node->next_sibling())

@@ -35,7 +35,7 @@ void WorkspaceState::Init()
     // camera
     camera = &(app->camera);
     
-    
+    frame = 0;
 
     // build and compile shaders
     // -------------------------
@@ -50,6 +50,8 @@ void WorkspaceState::Init()
     // -----------       
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FL_LINE or GL_FILL
     ourModel = Model("backpack/backpack.obj");
+    app->parse_all_obj_to_txt();
+    
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -75,10 +77,11 @@ void WorkspaceState::Update()
         app->ChangeState(HomeScreenState::Instance());
     }
     ImGui::End();
+
+    prevFrame = frame; // set before you change it
         
     ImGui::Begin("Time evolution slider");
-    frame = 0;
-    ImGui::SliderInt("frame", &frame, 0, 10); // TODO: change range from 0 to max frame.
+    ImGui::SliderInt("frame", &frame, 0, 100); // TODO: change range from 0 to max frame.
     ImGui::End();
 
     ImGui::Begin("Triangle Position/Color");
@@ -98,7 +101,7 @@ void WorkspaceState::Update()
         color[2]);
     ImGui::End();
 
-    std::cout << camera->Position.x << std::endl;
+    //std::cout << camera->Position.x << std::endl;
 }
 
 void WorkspaceState::Draw()
@@ -117,7 +120,12 @@ void WorkspaceState::Draw()
 
     // render VTK (.vtu) object
     // ----------------------------------------------------------------------------------------------------------------
-    app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
+    if (prevFrame != frame) // if the user has changed the frame
+    {
+        // may seem redundant but do not remove this conditional
+        // rendering simulation frames is expensive so this makes it much more efficient.
+        app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
+    }
     vtuShader->use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
