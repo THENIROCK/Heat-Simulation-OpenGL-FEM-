@@ -35,7 +35,7 @@ void WorkspaceState::Init()
     // camera
     camera = &(app->camera);
     
-    app->create_object(app->vbo, app->vao, app->ebo);
+    
 
     // build and compile shaders
     // -------------------------
@@ -75,6 +75,11 @@ void WorkspaceState::Update()
         app->ChangeState(HomeScreenState::Instance());
     }
     ImGui::End();
+        
+    ImGui::Begin("Time evolution slider");
+    frame = 0;
+    ImGui::SliderInt("frame", &frame, 0, 10); // TODO: change range from 0 to max frame.
+    ImGui::End();
 
     ImGui::Begin("Triangle Position/Color");
     static float rotation = 0.0;
@@ -108,7 +113,11 @@ void WorkspaceState::Draw()
     vtuShader->setMat4("projection", projection);
     vtuShader->setMat4("view", view);
 
+    
+
     // render VTK (.vtu) object
+    // ----------------------------------------------------------------------------------------------------------------
+    app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
     vtuShader->use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene

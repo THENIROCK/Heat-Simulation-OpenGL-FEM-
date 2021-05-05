@@ -48,10 +48,10 @@ public:
 	bool IsRunning() { return m_running; }
 	void Quit() { m_running = false; }
 	void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
-	void parse_points_file();
-	void parse_connectivity_file();
-	void parse_temperatures_file();
-	void create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
+	void parse_points_file(int frame);
+	void parse_connectivity_file(int frame);
+	void parse_temperatures_file(int frame);
+	void create_object(int frame, unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
 	void draw_object();
 
 	// glfw: process inputs
@@ -78,7 +78,7 @@ public:
 	//TODO add in window variables n stuff
 	//------------------------------------
 	GLFWwindow* window;
-	unsigned int vbo, vao, ebo; // vertex buffer object, vertex array object, element buffer object 
+	unsigned int vbo, vao, ebo, colorBuffer; // vertex buffer object, vertex array object, element buffer object 
 	const char* glsl_version;
 	unsigned int scr_width;
 	unsigned int scr_height;

@@ -273,7 +273,7 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
     // glBindVertexArray(0);
 }
 
-void AppEngine::parse_points_file()
+void AppEngine::parse_points_file(int frame)
 {
     ifstream readFile("points.txt");
     string line; //coordinate
@@ -299,7 +299,7 @@ void AppEngine::parse_points_file()
     readFile.close();
 }
 
-void AppEngine::parse_connectivity_file()
+void AppEngine::parse_connectivity_file(int frame)
 {
     // Next text file
     //-----------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ void AppEngine::parse_connectivity_file()
     readCoordFile.close();
 }
 
-void AppEngine::parse_temperatures_file()
+void AppEngine::parse_temperatures_file(int frame)
 {
     ifstream readFile("UV.txt");
     string temperatures;
@@ -373,13 +373,12 @@ void AppEngine::parse_temperatures_file()
     }*/
 }
 
-void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
+void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 {
-    parse_points_file();
-    parse_connectivity_file();
-    parse_temperatures_file();
+    parse_points_file(frame);
+    parse_connectivity_file(frame);
+    parse_temperatures_file(frame);
     
-
     //convert array to vector for testing purposes
     /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices +
         sizeof(a_triangle_vertices) / sizeof(float));*/
@@ -388,20 +387,36 @@ void AppEngine::create_object(unsigned int& vbo, unsigned int& vao, unsigned int
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ebo);
+    glGenBuffers(1, &colorBuffer);
 
     glBindVertexArray(vao);
+
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    glBufferData(GL_ARRAY_BUFFER, v_temps.size() * sizeof(float), v_temps.data(), GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0); // vertex position
+    glEnableVertexAttribArray(1); // color
+
     // Vertices are in stride 12 bytes
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+
+    // Colors are in stride 4 bytes
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void*)0 );
+    
     // Colours are in stride 24 bytes
     //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     //glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     // glBindVertexArray(0);

@@ -43,6 +43,7 @@ public:
 	AppEngine* app;
 	Model ourModel;
 	Camera* camera;
+	int frame; // current simulation frame to render
 	
 protected:
 	WorkspaceState() {} //Singleton Pattern
