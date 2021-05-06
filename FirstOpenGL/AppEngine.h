@@ -8,7 +8,7 @@
 #include "camera.h"
 
 #include <vector>
-using namespace std;
+using namespace std; //TODO: Remove this cursed line but pls don't break anything.
 
 class AppState;
 

@@ -119,20 +119,4 @@ void XMLParser::parseXMLFile(string file, string frame)
     parseIndices(file, frame);
     parseTemperatures(file, frame);
 
-    // Iterate over the student nodes
-    //for (student_node; student_node; student_node = student_node->next_sibling())
-    //{
-    //    cout << student_node << endl;
-    //    cout << "\nStudent Type =   " << student_node->first_attribute()->value();
-    //    cout << endl;
-
-    //    // Interate over the Student Names
-    //    for (xml_node<>* student_name_node = student_node->first_node("Name"); student_name_node; student_name_node = student_name_node->next_sibling())
-    //    {
-    //        cout << "Student Name =   " << student_name_node->value();
-    //        cout << endl;
-    //    }
-    //    cout << endl;
-    //}
-
 }

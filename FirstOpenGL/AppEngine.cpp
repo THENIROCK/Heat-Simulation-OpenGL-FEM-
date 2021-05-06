@@ -14,6 +14,7 @@
 #include <string>
 #include <iomanip>
 #include <filesystem>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
@@ -278,7 +279,7 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
 
 void AppEngine::parse_points_file(string frame)
 {
-    ifstream readFile("points.txt");
+    ifstream readFile("points-"+frame+".txt");
     string line; //coordinate
 
     // read the file line by line
@@ -306,14 +307,19 @@ void AppEngine::parse_connectivity_file(string frame)
 {
     // Next text file
     //-----------------------------------------------------------------------------------------
-    ifstream readCoordFile("connectivity.txt");
+    ifstream readCoordFile("connectivity-"+frame+".txt");
     string coordLine; //coordinate
 
     // read the file line by line
     while (getline(readCoordFile, coordLine)) {
+        // ensure that there are no leading/trailing whitespaces
+        boost::trim(coordLine);
+
+        // now we can check if the line is empty. If we hadn't trimmed, a space would have 
+        // slipped through this check and messed up the algorithm.
         if (coordLine.empty())
         {
-            cout << "empty line" << endl;
+            cout << "empty line" << endl; // little debug
         }
         else
         {
@@ -322,17 +328,21 @@ void AppEngine::parse_connectivity_file(string frame)
             // Create a string stream to parse the line https://www.youtube.com/watch?v=cR-N5DIrAGM
             istringstream iss(coordLine);
 
-            // we will store 3 vertices at a time and push them onto the vector 3 at a time.
+            // we will store 4 vertices at a time and push them onto the vector 3 at a time.
             vector<int> quad;
             //temp to store current coordinate
             int coord;
 
-            // skip blank first line
+            cout << "Coord: " << coordLine << endl;
 
             // while the string stream has not reached the end
             while (iss >> coord)
             {
                 quad.push_back(coord); // push the coordinate to the vector
+            }
+
+            for (int i = 0; i < quad.size(); i++) {
+                cout << "quad " << i << ": " << quad[i] << endl;
             }
 
             // first triangle
@@ -348,9 +358,9 @@ void AppEngine::parse_connectivity_file(string frame)
     }
 
     //print the vector
-    //for (int i = 0; i < indices.size(); i++) {
-    //    cout << "index" << indices[i] << endl;
-    //}
+    /*for (int i = 0; i < indices.size(); i++) {
+        cout << "index" << indices[i] << endl;
+    }*/
 
     // Close the file
     readCoordFile.close();
@@ -358,7 +368,7 @@ void AppEngine::parse_connectivity_file(string frame)
 
 void AppEngine::parse_temperatures_file(string frame)
 {
-    ifstream readFile("UV.txt");
+    ifstream readFile("UV-"+frame+".txt");
     string temperatures;
     getline(readFile, temperatures);
     getline(readFile, temperatures);
