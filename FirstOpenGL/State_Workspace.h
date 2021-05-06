@@ -36,7 +36,7 @@ public:
 	WorkspaceState operator=(const WorkspaceState&) = delete;
 
 	// Variables
-	//----------
+	//-----------------------------------------------------------------------------
 	Shader* vtuShader; // you can name your shader files however you like
 	Shader* triangleShader;
 	Shader* simpleShader;

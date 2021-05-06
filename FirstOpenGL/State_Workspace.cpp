@@ -79,7 +79,7 @@ void WorkspaceState::Update()
     ImGui::End();
 
     prevFrame = frame; // set before you change it
-        
+
     ImGui::Begin("Time evolution slider");
     ImGui::SliderInt("frame", &frame, 0, 100); // TODO: change range from 0 to max frame.
     ImGui::End();
@@ -120,12 +120,16 @@ void WorkspaceState::Draw()
 
     // render VTK (.vtu) object
     // ----------------------------------------------------------------------------------------------------------------
-    if (prevFrame != frame) // if the user has changed the frame
-    {
-        // may seem redundant but do not remove this conditional
-        // rendering simulation frames is expensive so this makes it much more efficient.
-        app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
-    }
+    //if (prevFrame != frame) // if the user has changed the frame
+    //{
+    //    // may seem redundant but do not remove this conditional
+    //    // rendering simulation frames is expensive so this makes it much more efficient.
+    //    app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
+    //}
+
+    app->create_object(frame, app->vbo, app->vao, app->ebo);
+    cout << "frame: " << frame << endl;
+
     vtuShader->use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene

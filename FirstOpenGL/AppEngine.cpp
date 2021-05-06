@@ -73,6 +73,7 @@ int AppEngine::Init(const char* title, int width, int height, int bpp, bool full
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    //glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // set GLFW input modes
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -197,10 +198,7 @@ void AppEngine::processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-        std::cout << "W pressed \n" << std::endl;
-    }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -235,7 +233,11 @@ void AppEngine::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+        camera.ProcessMouseMovement(xoffset, yoffset);
+
+    }
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
@@ -244,6 +246,12 @@ void AppEngine::scroll_callback(GLFWwindow* window, double xoffset, double yoffs
 {
     camera.ProcessMouseScroll(yoffset);
 }
+
+//void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+//{
+//    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+//        popup_menu();
+//}
 
 void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 {
@@ -333,7 +341,7 @@ void AppEngine::parse_connectivity_file(string frame)
             //temp to store current coordinate
             int coord;
 
-            cout << "Coord: " << coordLine << endl;
+            //cout << "Coord: " << coordLine << endl;
 
             // while the string stream has not reached the end
             while (iss >> coord)
@@ -342,7 +350,7 @@ void AppEngine::parse_connectivity_file(string frame)
             }
 
             for (int i = 0; i < quad.size(); i++) {
-                cout << "quad " << i << ": " << quad[i] << endl;
+                //cout << "quad " << i << ": " << quad[i] << endl;
             }
 
             // first triangle
@@ -447,7 +455,7 @@ void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, u
 void AppEngine::draw_object()
 {
     glBindVertexArray(vao);
-    glDisable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
