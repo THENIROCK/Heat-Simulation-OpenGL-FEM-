@@ -32,6 +32,8 @@ void WorkspaceState::Init()
 {
     app = AppEngine::Instance();
 
+    app->set_up_buffers_and_arrays();
+
     // camera
     camera = &(app->camera);
     
@@ -40,7 +42,7 @@ void WorkspaceState::Init()
     // build and compile shaders
     // -------------------------
     vtuShader = new Shader("vtu-shader.vert", "vtu-shader.frag");
-    triangleShader = new Shader("simple-shader.vert", "simple-shader.frag");
+    triangleShader = new Shader("simplge-shader.vert", "simple-shader.frag");
     simpleShader = new Shader("3.3.shader.vert", "3.3.shader.frag");
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
@@ -51,7 +53,7 @@ void WorkspaceState::Init()
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FL_LINE or GL_FILL
     ourModel = Model("backpack/backpack.obj");
     app->parse_all_obj_to_txt();
-    
+    app->create_object(frame, app->vbo, app->vao, app->ebo);
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -81,7 +83,24 @@ void WorkspaceState::Update()
     prevFrame = frame; // set before you change it
 
     ImGui::Begin("Time evolution slider");
-    ImGui::SliderInt("frame", &frame, 0, 100); // TODO: change range from 0 to max frame.
+    static int sliderFrame = 0;
+    ImGui::SliderInt("frame", &sliderFrame, 0, 200); // TODO: change range from 0 to max frame.
+    //frame = sliderFrame;
+    if (glfwGetKey(app->window, GLFW_KEY_P) == GLFW_PRESS) // P key pressed
+    {
+        frame++;
+        cout << "new frame" << frame << endl;
+        // may seem redundant but do not remove this conditional
+        // rendering simulation frames is expensive so this makes it much more efficient.
+        app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
+    }else if (glfwGetKey(app->window, GLFW_KEY_O) == GLFW_PRESS) // P key pressed
+    {
+        frame--;
+        cout << "new frame" << frame << endl;
+        // may seem redundant but do not remove this conditional
+        // rendering simulation frames is expensive so this makes it much more efficient.
+        app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
+    }
     ImGui::End();
 
     ImGui::Begin("Triangle Position/Color");
@@ -106,35 +125,49 @@ void WorkspaceState::Update()
 
 void WorkspaceState::Draw()
 {
-    //glClearColor(1.0f,1.0f,1.0f,1.0f); //white
-    glClearColor(0, 0, 0, 0); // black
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDepthMask(GL_TRUE);
 
+    glClearColor(0, 0, 0, 0); // black
+    //glClearColor(1.0f,1.0f,1.0f,1.0f); //white
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     // view/projection transformations
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)app->scr_width / (float)app->scr_height, 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     vtuShader->setMat4("projection", projection);
     vtuShader->setMat4("view", view);
 
-    
+
+    // ISSUE: Not refreshing newly drawn object
+    //-------------------------------------------------------------
+    // https://stackoverflow.com/questions/33607194/opengl-updating-vertices-array-buffer
+    // https://stackoverflow.com/questions/41784790/how-to-update-vertex-buffer-data-frequently-every-frame-opengl/41784937
+    //-------------------------------------------------------------
 
     // render VTK (.vtu) object
     // ----------------------------------------------------------------------------------------------------------------
     //if (prevFrame != frame) // if the user has changed the frame
     //{
+    //    cout << "new frame" << frame << endl;
+    //    glClearColor(0, 0, 0, 0); // black
+    //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //    // may seem redundant but do not remove this conditional
     //    // rendering simulation frames is expensive so this makes it much more efficient.
     //    app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
     //}
 
-    app->create_object(frame, app->vbo, app->vao, app->ebo);
-    cout << "frame: " << frame << endl;
+    //app->create_object(frame, app->vbo, app->vao, app->ebo);
+
+    //cout << "frame: " << frame << endl;
 
     vtuShader->use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
     model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// scale it down
     vtuShader->setMat4("model", model);
+
     app->draw_object();
 
     // render the loaded model

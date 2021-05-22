@@ -110,7 +110,7 @@ void XMLParser::parseIndices(string file, string frame)
 
 void XMLParser::parseXMLFile(string file, string frame)
 {
-    cout << "\nParsing VTK data ("+file+")....." << endl;
+    //cout << "\nParsing VTK data ("+file+")....." << endl;
     
     // change frame number to triple digit format
     // e.g. 000, 001, 146, 859

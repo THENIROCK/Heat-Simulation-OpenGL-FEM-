@@ -52,7 +52,9 @@ public:
 	void parse_connectivity_file(std::string frame);
 	void parse_temperatures_file(std::string frame);
 	void create_object(int frame, unsigned int& vbo, unsigned int& vao, unsigned int& ebo);
+	void set_up_buffers_and_arrays();
 	void draw_object();
+	void set_color_buffer(int threeDigfileNumber);
 	void parse_all_obj_to_txt();
 
 	// glfw: process inputs

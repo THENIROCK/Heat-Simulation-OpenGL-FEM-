@@ -12,9 +12,15 @@ uniform mat4 projection;
 
 void main()
 {
-    if (a_vertexColor > 0.0009f)
+    if(a_vertexColor > 0.01f){
+        VertexColor = vec4(1.0, 1.0, 1.0, 0);
+    }
+    else if (a_vertexColor > 0.0009f)
     {
         VertexColor = vec4(0.8, 0.0, 0.0, 0.0);
+    }else if (a_vertexColor < 0.0009 && a_vertexColor > 0.0005)
+    {
+        VertexColor = vec4(0, 0.8, 0.0, 0.0);
     }
     else
     {

@@ -287,6 +287,7 @@ void AppEngine::create_triangle(unsigned int& vbo, unsigned int& vao, unsigned i
 
 void AppEngine::parse_points_file(string frame)
 {
+    vertices.clear();
     ifstream readFile("points-"+frame+".txt");
     string line; //coordinate
 
@@ -313,6 +314,7 @@ void AppEngine::parse_points_file(string frame)
 
 void AppEngine::parse_connectivity_file(string frame)
 {
+    indices.clear();
     // Next text file
     //-----------------------------------------------------------------------------------------
     ifstream readCoordFile("connectivity-"+frame+".txt");
@@ -327,7 +329,7 @@ void AppEngine::parse_connectivity_file(string frame)
         // slipped through this check and messed up the algorithm.
         if (coordLine.empty())
         {
-            cout << "empty line" << endl; // little debug
+            //cout << "empty line" << endl; // little debug
         }
         else
         {
@@ -349,9 +351,9 @@ void AppEngine::parse_connectivity_file(string frame)
                 quad.push_back(coord); // push the coordinate to the vector
             }
 
-            for (int i = 0; i < quad.size(); i++) {
-                //cout << "quad " << i << ": " << quad[i] << endl;
-            }
+            /*for (int i = 0; i < quad.size(); i++) {
+                cout << "quad " << i << "frame" << frame << ": " << quad[i] << endl;
+            }*/
 
             // first triangle
             indices.push_back(quad[0]);
@@ -376,6 +378,7 @@ void AppEngine::parse_connectivity_file(string frame)
 
 void AppEngine::parse_temperatures_file(string frame)
 {
+    v_temps.clear();
     ifstream readFile("UV-"+frame+".txt");
     string temperatures;
     getline(readFile, temperatures);
@@ -394,6 +397,14 @@ void AppEngine::parse_temperatures_file(string frame)
     }*/
 }
 
+void AppEngine::set_up_buffers_and_arrays() {
+    // allocate memory to 1 vertex array, buffer, element buffer
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+    glGenBuffers(1, &colorBuffer);
+}
+
 void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 {
     string threeDigfileNumber; // declare a variable to hold the 3 digit version of 'frame'
@@ -405,6 +416,8 @@ void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, u
     oss << setfill('0') << setw(3) << to_string(frame);
     threeDigfileNumber = oss.str();
 
+    //cout << threeDigfileNumber << endl;
+
     parse_points_file(threeDigfileNumber);
     parse_connectivity_file(threeDigfileNumber);
     parse_temperatures_file(threeDigfileNumber);
@@ -412,12 +425,6 @@ void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, u
     //convert array to vector for testing purposes
     /*vector<float> triangle_vertices(a_triangle_vertices, a_triangle_vertices +
         sizeof(a_triangle_vertices) / sizeof(float));*/
-
-    // allocate memory to 1 vertex array, buffer, element buffer
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-    glGenBuffers(1, &colorBuffer);
 
     glBindVertexArray(vao);
 
@@ -441,15 +448,31 @@ void AppEngine::create_object(int frame, unsigned int& vbo, unsigned int& vao, u
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void*)0 );
     
-    // Colours are in stride 24 bytes
-    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    //glEnableVertexAttribArray(1);
+    // Colors are in stride 24 bytes
+    /*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);*/
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     // glBindVertexArray(0);
+}
+
+void AppEngine::set_color_buffer(int frame) {
+
+    string threeDigFileNumber;
+    ostringstream oss;
+
+    // we set the spaces to be filled with 0's like so: 1 --> 000001
+    // then we set the width to a length of 3 like so: 000001 --> 001
+    // finally, convert that to a string and feed it into the variable.
+    oss << setfill('0') << setw(3) << to_string(frame);
+    threeDigFileNumber = oss.str();
+
+    //cout << threeDigFileNumber << endl;
+
+    parse_temperatures_file(threeDigFileNumber);
 }
 
 void AppEngine::draw_object()
@@ -467,7 +490,7 @@ void AppEngine::parse_all_obj_to_txt()
 
     int frame = 0; // begin with file 000
 
-    cout << "beginning while loop" << endl;
+    //cout << "beginning while loop" << endl;
 
     while (!endReached) // self-explanatory. While the end has not been reached...
     {
