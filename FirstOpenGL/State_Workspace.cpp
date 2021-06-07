@@ -34,6 +34,9 @@ void WorkspaceState::Init()
 
     app->set_up_buffers_and_arrays();
 
+    // set default to perspective projection lolol
+    perspectiveOn = true;
+
     // camera
     camera = &(app->camera);
     
@@ -73,10 +76,14 @@ void WorkspaceState::HandleEvents()
 
 void WorkspaceState::Update()
 {
-    ImGui::Begin("Demo window");
-    if (ImGui::Button("Hello!"))
+    ImGui::Begin("Navigation");
+    if (ImGui::Button("Home"))
     {
         app->ChangeState(HomeScreenState::Instance());
+    }
+    if (ImGui::Button("Ortho/Perspective"))
+    {
+        perspectiveOn = !perspectiveOn;
     }
     ImGui::End();
 
@@ -101,6 +108,14 @@ void WorkspaceState::Update()
         // rendering simulation frames is expensive so this makes it much more efficient.
         app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
     }
+
+    // change frames according to slider
+    if (sliderFrame != prevFrame)
+    {
+        frame = sliderFrame;
+        app->create_object(frame, app->vbo, app->vao, app->ebo);
+    }
+
     ImGui::End();
 
     ImGui::Begin("Triangle Position/Color");
@@ -134,7 +149,16 @@ void WorkspaceState::Draw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // view/projection transformations
-    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)app->scr_width / (float)app->scr_height, 0.1f, 100.0f);
+    
+    if (perspectiveOn)
+    {
+        projection = glm::perspective(glm::radians(camera->Zoom), (float)app->scr_width / (float)app->scr_height, 0.1f, 100.0f);
+
+    }
+    else
+    {
+        projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f);
+    }
     glm::mat4 view = camera->GetViewMatrix();
     vtuShader->setMat4("projection", projection);
     vtuShader->setMat4("view", view);

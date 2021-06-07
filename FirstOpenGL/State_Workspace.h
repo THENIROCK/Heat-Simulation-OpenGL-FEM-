@@ -45,6 +45,8 @@ public:
 	Camera* camera;
 	int frame; // current simulation frame to render
 	int prevFrame;
+	bool perspectiveOn; // orthographic or perspective projection
+	glm::mat4 projection;
 	
 protected:
 	WorkspaceState() {} //Singleton Pattern
