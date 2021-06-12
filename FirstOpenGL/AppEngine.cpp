@@ -172,7 +172,7 @@ void AppEngine::HandleEvents()
 void AppEngine::Update()
 {
     // per-frame time logic
-        // --------------------
+    // --------------------
     float currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
@@ -187,6 +187,7 @@ void AppEngine::Update()
 }
 void AppEngine::Draw()
 {
+    // Render for the current app state
     states.back()->Draw();
 }
 

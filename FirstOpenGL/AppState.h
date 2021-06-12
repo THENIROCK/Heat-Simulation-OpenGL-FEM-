@@ -12,8 +12,8 @@ public:
 
 	// Call State Manager (AppEngine) Functions
 	//---------------------------------------
-	void ChangeState(AppEngine* game, AppState* state) {
-		game->ChangeState(state); // Call function in state manager
+	void ChangeState(AppEngine* app, AppState* state) {
+		app->ChangeState(state); // Call function in state manager
 	}
 
 	// On Update
