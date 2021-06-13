@@ -306,15 +306,15 @@ void WorkspaceState::Draw()
 
     // render VTK (.vtu) object
     // ----------------------------------------------------------------------------------------------------------------
-    //if (prevFrame != frame) // if the user has changed the frame
-    //{
-    //    cout << "new frame" << frame << endl;
-    //    glClearColor(0, 0, 0, 0); // black
-    //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //    // may seem redundant but do not remove this conditional
-    //    // rendering simulation frames is expensive so this makes it much more efficient.
-    //    app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
-    //}
+    if (prevFrame != frame) // if the user has changed the frame
+    {
+        cout << "new frame" << frame << endl;
+        glClearColor(0, 0, 0, 0); // black
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // may seem redundant but do not remove this conditional
+        // rendering simulation frames is expensive so this makes it much more efficient.
+        app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
+    }
 
     //app->create_object(frame, app->vbo, app->vao, app->ebo);
 
@@ -336,26 +336,26 @@ void WorkspaceState::Draw()
     //ourShader->setMat4("model", model);
     //ourModel.Draw(*ourShader);
 
-    if (selectedEnvironment == 0 || selectedEnvironment == 3)
-    {
-        //SKYBOX
-        //----------------------------------------------------
-        // draw skybox first
-        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-        skyboxShader->use();
-        glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix())); // remove translation from the view matrix
-        skyboxShader->setMat4("view", view);
-        skyboxShader->setMat4("projection", projection);
-        // skybox cube
-        glBindVertexArray(skyboxVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // set depth function back to default
+    //if (selectedEnvironment == 0 || selectedEnvironment == 3)
+    //{
+    //    //SKYBOX
+    //    //----------------------------------------------------
+    //    // draw skybox first
+    //    glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+    //    skyboxShader->use();
+    //    glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix())); // remove translation from the view matrix
+    //    skyboxShader->setMat4("view", view);
+    //    skyboxShader->setMat4("projection", projection);
+    //    // skybox cube
+    //    glBindVertexArray(skyboxVAO);
+    //    glActiveTexture(GL_TEXTURE0);
+    //    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+    //    glDrawArrays(GL_TRIANGLES, 0, 36);
+    //    glBindVertexArray(0);
+    //    glDepthFunc(GL_LESS); // set depth function back to default
 
-        //----------------------------------------------------
-    }
+    //    //----------------------------------------------------
+    //}
     
 
     // Render dear imgui onto screen

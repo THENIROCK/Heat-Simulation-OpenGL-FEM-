@@ -4,10 +4,7 @@ layout (location = 1) in float a_vertexColor;
 //layout (location = 1) in vec3 aNormal;
 //layout (location = 2) in vec2 aTexCoords;
 
-
-
-vec4 VertexColor;
-
+out vec4 VertexColor;
 
 uniform mat4 model;
 uniform mat4 view;
