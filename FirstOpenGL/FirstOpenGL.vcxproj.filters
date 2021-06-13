@@ -202,7 +202,13 @@
     <None Include="6.1.skybox.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="vtu-shader.geom">
+    <None Include="vtu-shader-geo.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="vtu-shader-geo.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="vtu-shader-geo.geom">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
