@@ -241,6 +241,7 @@ void AppEngine::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     {
         camera.ProcessMouseMovement(xoffset, yoffset);
 
+
     }
 }
 
@@ -249,6 +250,7 @@ void AppEngine::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void AppEngine::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
+    
 }
 
 //void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

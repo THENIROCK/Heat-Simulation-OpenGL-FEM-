@@ -38,7 +38,7 @@ public:
 
 	// Variables
 	//-----------------------------------------------------------------------------
-	Shader* vtuShader; // you can name your shader files however you like
+	ShaderWGeo* vtuShader; // you can name your shader files however you like
 	Shader* triangleShader;
 	Shader* simpleShader;
 	Shader* skyboxShader;
@@ -56,6 +56,7 @@ public:
 
 	//My methods
 	unsigned int loadCubemap(vector<std::string> faces);
+	void getColourUnderCursor();
 	
 protected:
 	WorkspaceState() {} //Singleton Pattern

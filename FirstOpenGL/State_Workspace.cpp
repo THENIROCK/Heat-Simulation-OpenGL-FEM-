@@ -25,6 +25,9 @@
 #include <iostream>
 #include <filesystem>
 
+
+
+
 #define PI 3.1415926535897932384626
 
 WorkspaceState WorkspaceState::s_WorkspaceState; // implement/create a Singleton instance on the stack
@@ -46,8 +49,8 @@ void WorkspaceState::Init()
     // build and compile shaders
     // -------------------------
     //vtuShader = new ShaderWGeo("vtu-shader.vert", "vtu-shader.frag", "vtu-shader.geom");
-    vtuShader = new Shader("vtu-shader.vert", "vtu-shader.frag");
-    triangleShader = new Shader("simplge-shader.vert", "simple-shader.frag");
+    vtuShader = new ShaderWGeo("vtu-shader-geo.vert", "vtu-shader-geo.frag", "vtu-shader-geo.geom");
+    triangleShader = new Shader("simple-shader.vert", "simple-shader.frag");
     simpleShader = new Shader("3.3.shader.vert", "3.3.shader.frag");
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
@@ -67,81 +70,81 @@ void WorkspaceState::Init()
     //SKYBOX --------------------------------------------------------------------------------------------------------------------------
     skyboxShader = new Shader("6.1.skybox.vert", "6.1.skybox.frag");
 
-   // //set up vertex data (and buffer(s)) and configure vertex attributes
-   // //------------------------------------------------------------------
-   // float skyboxVertices[] = {
-   //     // positions          
-   //     -1.0f,  1.0f, -1.0f,
-   //     -1.0f, -1.0f, -1.0f,
-   //      1.0f, -1.0f, -1.0f,
-   //      1.0f, -1.0f, -1.0f,
-   //      1.0f,  1.0f, -1.0f,
-   //     -1.0f,  1.0f, -1.0f,
+   //// //set up vertex data (and buffer(s)) and configure vertex attributes
+   //// //------------------------------------------------------------------
+    float skyboxVertices[] = {
+        // positions          
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
 
-   //     -1.0f, -1.0f,  1.0f,
-   //     -1.0f, -1.0f, -1.0f,
-   //     -1.0f,  1.0f, -1.0f,
-   //     -1.0f,  1.0f, -1.0f,
-   //     -1.0f,  1.0f,  1.0f,
-   //     -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
 
-   //      1.0f, -1.0f, -1.0f,
-   //      1.0f, -1.0f,  1.0f,
-   //      1.0f,  1.0f,  1.0f,
-   //      1.0f,  1.0f,  1.0f,
-   //      1.0f,  1.0f, -1.0f,
-   //      1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
 
-   //     -1.0f, -1.0f,  1.0f,
-   //     -1.0f,  1.0f,  1.0f,
-   //      1.0f,  1.0f,  1.0f,
-   //      1.0f,  1.0f,  1.0f,
-   //      1.0f, -1.0f,  1.0f,
-   //     -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
 
-   //     -1.0f,  1.0f, -1.0f,
-   //      1.0f,  1.0f, -1.0f,
-   //      1.0f,  1.0f,  1.0f,
-   //      1.0f,  1.0f,  1.0f,
-   //     -1.0f,  1.0f,  1.0f,
-   //     -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
 
-   //     -1.0f, -1.0f, -1.0f,
-   //     -1.0f, -1.0f,  1.0f,
-   //      1.0f, -1.0f, -1.0f,
-   //      1.0f, -1.0f, -1.0f,
-   //     -1.0f, -1.0f,  1.0f,
-   //      1.0f, -1.0f,  1.0f
-   // };
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+    };
 
-   // // skybox VAO
-   // //-----------
-   //glGenVertexArrays(1, &skyboxVAO);
-   // glGenBuffers(1, &skyboxVBO);
-   // glBindVertexArray(skyboxVAO);
-   // glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-   // glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-   // glEnableVertexAttribArray(0);
-   // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-   // 
-   // // load textures
-   // //--------------
-   // vector<std::string> faces
-   // {
-   //     "skybox/right.jpg",
-   //     "skybox/left.jpg",
-   //     "skybox/top.jpg",
-   //     "skybox/bottom.jpg",
-   //     "skybox/front.jpg",
-   //     "skybox/back.jpg"
-   // };
-   // cubemapTexture = loadCubemap(faces);
-   // previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
+    // skybox VAO
+    //-----------
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    
+    // load textures
+    //--------------
+    vector<std::string> faces
+    {
+        "skybox/right.jpg",
+        "skybox/left.jpg",
+        "skybox/top.jpg",
+        "skybox/bottom.jpg",
+        "skybox/front.jpg",
+        "skybox/back.jpg"
+    };
+    cubemapTexture = loadCubemap(faces);
+    previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
 
-   // // shader configuration
-   // // --------------------
-   // skyboxShader->use();
-   // skyboxShader->setInt("skybox", 0);
+    // shader configuration
+    // --------------------
+    skyboxShader->use();
+    skyboxShader->setInt("skybox", 0);
     //------------------------------------------------------------------------------------------------------------------------------------
 }
 
@@ -373,7 +376,7 @@ void WorkspaceState::Draw()
 
     //SKYBOX
     //-------------------------------------------------------------------------------------------------------------------------
-    // draw skybox last
+    //// draw skybox last
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
     skyboxShader->use();
     view = glm::mat4(glm::mat3(camera->GetViewMatrix())); // remove translation from the view matrix
@@ -386,7 +389,7 @@ void WorkspaceState::Draw()
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
     glDepthFunc(GL_LESS); // set depth function back to default
-
+    vtuShader->use();
     //--------------------------------------------------------------------------------------------------------------------------
     
 
