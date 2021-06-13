@@ -257,6 +257,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="ShaderWithGeo.h" />
     <ClInclude Include="shader_s.h" />
     <ClInclude Include="State_HomeScreen.h" />
     <ClInclude Include="State_Workspace.h" />
@@ -269,9 +270,12 @@
     <None Include="1.model_loading.vert" />
     <None Include="3.3.shader.frag" />
     <None Include="3.3.shader.vert" />
+    <None Include="6.1.skybox.frag" />
+    <None Include="6.1.skybox.vert" />
     <None Include="simple-shader.frag" />
     <None Include="simple-shader.vert" />
     <None Include="vtu-shader.frag" />
+    <None Include="vtu-shader.geom" />
     <None Include="vtu-shader.vert" />
   </ItemGroup>
   <ItemGroup>

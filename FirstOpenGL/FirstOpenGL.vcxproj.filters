@@ -96,10 +96,10 @@
     <ClCompile Include="WaveEquationTimeDependent.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="XMLParser.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
     <ClCompile Include="VTU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,6 +167,9 @@
     <ClInclude Include="XMLParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderWithGeo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="3.3.shader.vert">
@@ -191,6 +194,15 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="vtu-shader.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="6.1.skybox.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="6.1.skybox.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="vtu-shader.geom">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

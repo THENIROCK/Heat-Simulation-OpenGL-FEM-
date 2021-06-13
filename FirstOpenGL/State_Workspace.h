@@ -5,6 +5,7 @@
 #include "camera.h"
 
 class Shader; // use forward declarations when implementation is not needed. https://stackoverflow.com/questions/1542623/syntax-error-missing-before
+class ShaderWGeo;
 
 class WorkspaceState : public AppState
 {
@@ -40,6 +41,7 @@ public:
 	Shader* vtuShader; // you can name your shader files however you like
 	Shader* triangleShader;
 	Shader* simpleShader;
+	Shader* skyboxShader;
 	AppEngine* app;
 	Model ourModel;
 	Camera* camera;
@@ -47,6 +49,13 @@ public:
 	int prevFrame;
 	bool perspectiveOn; // orthographic or perspective projection
 	glm::mat4 projection;
+	unsigned int skyboxVAO, skyboxVBO;
+	unsigned int cubemapTexture;
+	int selectedEnvironment;
+	int previousEnvironment;
+
+	//My methods
+	unsigned int loadCubemap(vector<std::string> faces);
 	
 protected:
 	WorkspaceState() {} //Singleton Pattern
