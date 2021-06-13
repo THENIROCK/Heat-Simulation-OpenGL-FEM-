@@ -20,7 +20,6 @@
 #include "AppEngine.h"
 #include "Model.h"
 #include "shader_s.h"
-#include "ShaderWithGeo.h"
 
 #include <iostream>
 #include <filesystem>
@@ -63,85 +62,7 @@ void WorkspaceState::Init()
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    //SKYBOX -------------------------------------------------------------------------------------------
-    skyboxShader = new Shader("6.1.skybox.vert", "6.1.skybox.frag");
-
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float skyboxVertices[] = {
-        // positions          
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f
-    };
-    // skybox VAO
-    //-----------
-    
-    glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindVertexArray(skyboxVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    
-    // load textures
-    //--------------
-    vector<std::string> faces
-    {
-        "skybox/right.jpg",
-        "skybox/left.jpg",
-        "skybox/top.jpg",
-        "skybox/bottom.jpg",
-        "skybox/front.jpg",
-        "skybox/back.jpg"
-    };
-    cubemapTexture = loadCubemap(faces);
-    previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
-
-    // shader configuration
-    // --------------------
-    skyboxShader->use();
-    skyboxShader->setInt("skybox", 0);
-    //--------------------------------------------------------------------------------------------------
+   
 }
 
 void WorkspaceState::Cleanup()
@@ -149,9 +70,6 @@ void WorkspaceState::Cleanup()
     delete vtuShader;
     delete triangleShader;
     delete simpleShader;
-    delete skyboxShader;
-    glDeleteVertexArrays(1, &skyboxVAO);
-    glDeleteBuffers(1, &skyboxVAO);
 }
 
 void WorkspaceState::HandleEvents()
@@ -177,50 +95,7 @@ void WorkspaceState::Update()
         {
             perspectiveOn = !perspectiveOn;
         }
-        ImGui::ListBox("Environment", &selectedEnvItem, environments, IM_ARRAYSIZE(environments));
-        selectedEnvironment = selectedEnvItem;
-        if (selectedEnvironment != previousEnvironment)
-        {
-            if (selectedEnvironment == 3)
-            {
-                // load textures
-                //--------------
-                vector<std::string> faces
-                {
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png"
-                };
-                cubemapTexture = loadCubemap(faces);
-                previousEnvironment = 3; // for performance. You don't want to be reloading an entire skybox every frame from file.
-            }
-            else if (selectedEnvironment == 0) 
-            {
-                // load textures
-                //--------------
-                vector<std::string> faces
-                {
-                    "skybox/right.jpg",
-                    "skybox/left.jpg",
-                    "skybox/top.jpg",
-                    "skybox/bottom.jpg",
-                    "skybox/front.jpg",
-                    "skybox/back.jpg"
-                };
-                cubemapTexture = loadCubemap(faces);
-                previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
-            }
-        }
         
-        
-
-        // shader configuration
-        // --------------------
-        skyboxShader->use();
-        skyboxShader->setInt("skybox", 0);
     ImGui::End();
 
     prevFrame = frame; // set before you change it
@@ -366,43 +241,4 @@ void WorkspaceState::Draw()
 
 
     
-}
-
-// loads a cubemap texture from 6 individual texture faces
-// order:
-// +X (right)
-// -X (left)
-// +Y (top)
-// -Y (bottom)
-// +Z (front) 
-// -Z (back)
-// -------------------------------------------------------
-unsigned int WorkspaceState::loadCubemap(vector<std::string> faces)
-{
-    unsigned int textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-    int width, height, nrChannels;
-    for (unsigned int i = 0; i < faces.size(); i++)
-    {
-        unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-            stbi_image_free(data);
-        }
-        else
-        {
-            std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-            stbi_image_free(data);
-        }
-    }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-    return textureID;
 }
