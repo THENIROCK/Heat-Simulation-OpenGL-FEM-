@@ -102,6 +102,24 @@
     <ClCompile Include="XMLParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="State__ObjectImporter.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="State_HelpState.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="State_NewSimulation.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="State_ObjectLibrary.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="State_ObjectSelector.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
+    <ClCompile Include="State_PastSimulation.cpp">
+      <Filter>Source Files\App States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader_s.h">
@@ -169,6 +187,24 @@
     </ClInclude>
     <ClInclude Include="ShaderWithGeo.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State_PastSimulation.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="State__ObjectImporter.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="State_HelpState.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="State_NewSimulation.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="State_ObjectLibrary.h">
+      <Filter>Header Files\App States</Filter>
+    </ClInclude>
+    <ClInclude Include="State_ObjectSelector.h">
+      <Filter>Header Files\App States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
