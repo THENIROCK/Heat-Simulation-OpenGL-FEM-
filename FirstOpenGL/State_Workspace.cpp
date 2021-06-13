@@ -63,11 +63,11 @@ void WorkspaceState::Init()
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    //SKYBOX -------------------------------------------------------------------------------------------
+    //SKYBOX --------------------------------------------------------------------------------------------------------------------------
     skyboxShader = new Shader("6.1.skybox.vert", "6.1.skybox.frag");
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
+    //set up vertex data (and buffer(s)) and configure vertex attributes
+    //------------------------------------------------------------------
     float skyboxVertices[] = {
         // positions          
         -1.0f,  1.0f, -1.0f,
@@ -112,10 +112,10 @@ void WorkspaceState::Init()
         -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f,  1.0f
     };
+
     // skybox VAO
     //-----------
-    
-    glGenVertexArrays(1, &skyboxVAO);
+   glGenVertexArrays(1, &skyboxVAO);
     glGenBuffers(1, &skyboxVBO);
     glBindVertexArray(skyboxVAO);
     glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
@@ -141,7 +141,7 @@ void WorkspaceState::Init()
     // --------------------
     skyboxShader->use();
     skyboxShader->setInt("skybox", 0);
-    //--------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------------------------
 }
 
 void WorkspaceState::Cleanup()
@@ -181,18 +181,51 @@ void WorkspaceState::Update()
         selectedEnvironment = selectedEnvItem;
         if (selectedEnvironment != previousEnvironment)
         {
-            if (selectedEnvironment == 3)
+            cout << "changing" << endl;
+            if (selectedEnvironment == 1)
             {
                 // load textures
                 //--------------
                 vector<std::string> faces
                 {
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png",
-                    "skybox/myGrid.png"
+                    "skybox/black-square.png",
+                    "skybox/black-square.png",
+                    "skybox/black-square.png",
+                    "skybox/black-square.png",
+                    "skybox/black-square.png",
+                    "skybox/black-square.png"
+                };
+                cubemapTexture = loadCubemap(faces);
+                previousEnvironment = 1;
+            }
+            else if (selectedEnvironment == 2)
+            {
+                // load textures
+                //--------------
+                vector<std::string> faces
+                {
+                    "skybox/white-square.jpg",
+                    "skybox/white-square.jpg",
+                    "skybox/white-square.jpg",
+                    "skybox/white-square.jpg",
+                    "skybox/white-square.jpg",
+                    "skybox/white-square.jpg"
+                };
+                cubemapTexture = loadCubemap(faces);
+                previousEnvironment = 2;
+            }
+            else if (selectedEnvironment == 3)
+            {
+                // load textures
+                //--------------
+                vector<std::string> faces
+                {
+                    "skybox/grid.jpg",
+                    "skybox/grid.jpg",
+                    "skybox/grid.jpg",
+                    "skybox/grid.jpg",
+                    "skybox/grid.jpg",
+                    "skybox/grid.jpg"
                 };
                 cubemapTexture = loadCubemap(faces);
                 previousEnvironment = 3; // for performance. You don't want to be reloading an entire skybox every frame from file.
@@ -213,14 +246,15 @@ void WorkspaceState::Update()
                 cubemapTexture = loadCubemap(faces);
                 previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
             }
+            // shader configuration
+            // --------------------
+            skyboxShader->use();
+            skyboxShader->setInt("skybox", 0);
         }
         
         
 
-        // shader configuration
-        // --------------------
-        skyboxShader->use();
-        skyboxShader->setInt("skybox", 0);
+        
     ImGui::End();
 
     prevFrame = frame; // set before you change it
@@ -293,6 +327,8 @@ void WorkspaceState::Draw()
         projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f);
     }
 
+    
+
     glm::mat4 view = camera->GetViewMatrix();
     vtuShader->setMat4("projection", projection);
     vtuShader->setMat4("view", view);
@@ -336,26 +372,24 @@ void WorkspaceState::Draw()
     //ourShader->setMat4("model", model);
     //ourModel.Draw(*ourShader);
 
-    //if (selectedEnvironment == 0 || selectedEnvironment == 3)
-    //{
-    //    //SKYBOX
-    //    //----------------------------------------------------
-    //    // draw skybox first
-    //    glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-    //    skyboxShader->use();
-    //    glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix())); // remove translation from the view matrix
-    //    skyboxShader->setMat4("view", view);
-    //    skyboxShader->setMat4("projection", projection);
-    //    // skybox cube
-    //    glBindVertexArray(skyboxVAO);
-    //    glActiveTexture(GL_TEXTURE0);
-    //    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-    //    glDrawArrays(GL_TRIANGLES, 0, 36);
-    //    glBindVertexArray(0);
-    //    glDepthFunc(GL_LESS); // set depth function back to default
 
-    //    //----------------------------------------------------
-    //}
+    //SKYBOX
+    //----------------------------------------------------
+    // draw skybox last
+    glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+    skyboxShader->use();
+    view = glm::mat4(glm::mat3(camera->GetViewMatrix())); // remove translation from the view matrix
+    skyboxShader->setMat4("view", view);
+    skyboxShader->setMat4("projection", projection);
+    // skybox cube
+    glBindVertexArray(skyboxVAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+    glDepthFunc(GL_LESS); // set depth function back to default
+
+    //----------------------------------------------------
     
 
     // Render dear imgui onto screen
