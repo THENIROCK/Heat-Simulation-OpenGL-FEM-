@@ -57,6 +57,7 @@ void WorkspaceState::Init()
     // -----------       
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FL_LINE or GL_FILL
     ourModel = Model("backpack/backpack.obj");
+    //load heat sim model
     app->parse_all_obj_to_txt();
     app->create_object(frame, app->vbo, app->vao, app->ebo);
 
@@ -66,81 +67,81 @@ void WorkspaceState::Init()
     //SKYBOX --------------------------------------------------------------------------------------------------------------------------
     skyboxShader = new Shader("6.1.skybox.vert", "6.1.skybox.frag");
 
-    //set up vertex data (and buffer(s)) and configure vertex attributes
-    //------------------------------------------------------------------
-    float skyboxVertices[] = {
-        // positions          
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
+   // //set up vertex data (and buffer(s)) and configure vertex attributes
+   // //------------------------------------------------------------------
+   // float skyboxVertices[] = {
+   //     // positions          
+   //     -1.0f,  1.0f, -1.0f,
+   //     -1.0f, -1.0f, -1.0f,
+   //      1.0f, -1.0f, -1.0f,
+   //      1.0f, -1.0f, -1.0f,
+   //      1.0f,  1.0f, -1.0f,
+   //     -1.0f,  1.0f, -1.0f,
 
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
+   //     -1.0f, -1.0f,  1.0f,
+   //     -1.0f, -1.0f, -1.0f,
+   //     -1.0f,  1.0f, -1.0f,
+   //     -1.0f,  1.0f, -1.0f,
+   //     -1.0f,  1.0f,  1.0f,
+   //     -1.0f, -1.0f,  1.0f,
 
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
+   //      1.0f, -1.0f, -1.0f,
+   //      1.0f, -1.0f,  1.0f,
+   //      1.0f,  1.0f,  1.0f,
+   //      1.0f,  1.0f,  1.0f,
+   //      1.0f,  1.0f, -1.0f,
+   //      1.0f, -1.0f, -1.0f,
 
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
+   //     -1.0f, -1.0f,  1.0f,
+   //     -1.0f,  1.0f,  1.0f,
+   //      1.0f,  1.0f,  1.0f,
+   //      1.0f,  1.0f,  1.0f,
+   //      1.0f, -1.0f,  1.0f,
+   //     -1.0f, -1.0f,  1.0f,
 
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
+   //     -1.0f,  1.0f, -1.0f,
+   //      1.0f,  1.0f, -1.0f,
+   //      1.0f,  1.0f,  1.0f,
+   //      1.0f,  1.0f,  1.0f,
+   //     -1.0f,  1.0f,  1.0f,
+   //     -1.0f,  1.0f, -1.0f,
 
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f
-    };
+   //     -1.0f, -1.0f, -1.0f,
+   //     -1.0f, -1.0f,  1.0f,
+   //      1.0f, -1.0f, -1.0f,
+   //      1.0f, -1.0f, -1.0f,
+   //     -1.0f, -1.0f,  1.0f,
+   //      1.0f, -1.0f,  1.0f
+   // };
 
-    // skybox VAO
-    //-----------
-   glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindVertexArray(skyboxVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    
-    // load textures
-    //--------------
-    vector<std::string> faces
-    {
-        "skybox/right.jpg",
-        "skybox/left.jpg",
-        "skybox/top.jpg",
-        "skybox/bottom.jpg",
-        "skybox/front.jpg",
-        "skybox/back.jpg"
-    };
-    cubemapTexture = loadCubemap(faces);
-    previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
+   // // skybox VAO
+   // //-----------
+   //glGenVertexArrays(1, &skyboxVAO);
+   // glGenBuffers(1, &skyboxVBO);
+   // glBindVertexArray(skyboxVAO);
+   // glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+   // glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+   // glEnableVertexAttribArray(0);
+   // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+   // 
+   // // load textures
+   // //--------------
+   // vector<std::string> faces
+   // {
+   //     "skybox/right.jpg",
+   //     "skybox/left.jpg",
+   //     "skybox/top.jpg",
+   //     "skybox/bottom.jpg",
+   //     "skybox/front.jpg",
+   //     "skybox/back.jpg"
+   // };
+   // cubemapTexture = loadCubemap(faces);
+   // previousEnvironment = 0; // for performance. You don't want to be reloading an entire skybox every frame from file.
 
-    // shader configuration
-    // --------------------
-    skyboxShader->use();
-    skyboxShader->setInt("skybox", 0);
+   // // shader configuration
+   // // --------------------
+   // skyboxShader->use();
+   // skyboxShader->setInt("skybox", 0);
     //------------------------------------------------------------------------------------------------------------------------------------
 }
 
@@ -260,7 +261,7 @@ void WorkspaceState::Update()
     prevFrame = frame; // set before you change it
 
     ImGui::Begin("Time evolution slider");
-        static int sliderFrame = 0;
+        static int sliderFrame = frame;
         ImGui::SliderInt("frame", &sliderFrame, 0, 200); // TODO: change range from 0 to max frame.
         //frame = sliderFrame;
         if (glfwGetKey(app->window, GLFW_KEY_P) == GLFW_PRESS) // P key pressed
@@ -351,11 +352,8 @@ void WorkspaceState::Draw()
         // rendering simulation frames is expensive so this makes it much more efficient.
         app->create_object(frame, app->vbo, app->vao, app->ebo); // load object into memory
     }
-
     //app->create_object(frame, app->vbo, app->vao, app->ebo);
-
     //cout << "frame: " << frame << endl;
-
     vtuShader->use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
@@ -374,7 +372,7 @@ void WorkspaceState::Draw()
 
 
     //SKYBOX
-    //----------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------------------
     // draw skybox last
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
     skyboxShader->use();
@@ -389,7 +387,7 @@ void WorkspaceState::Draw()
     glBindVertexArray(0);
     glDepthFunc(GL_LESS); // set depth function back to default
 
-    //----------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------
     
 
     // Render dear imgui onto screen

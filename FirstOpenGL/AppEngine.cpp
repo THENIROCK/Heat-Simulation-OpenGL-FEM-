@@ -234,7 +234,10 @@ void AppEngine::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    ImGuiIO& io = ImGui::GetIO(); // Be able to get whether imgui wants to steal input
+
+    //if mouse clicked and not using an imgui window
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !io.WantCaptureMouse)
     {
         camera.ProcessMouseMovement(xoffset, yoffset);
 
