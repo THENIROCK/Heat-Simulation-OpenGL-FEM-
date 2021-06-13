@@ -187,6 +187,21 @@
     <None Include="1.model_loading.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="vtu-shader-geo.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="vtu-shader-geo.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="6.1.skybox.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="6.1.skybox.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="vtu-shader-geo.geom">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
     <None Include="vtu-shader.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
